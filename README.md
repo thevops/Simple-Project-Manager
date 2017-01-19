@@ -31,7 +31,7 @@
   - rest of requirements will be installed automatically with others
 - python manager.py runserver
 
-## If you would like to find out more. Please ask me on [krzysztof . luczak 99 @ gmail . com] (without spaces)
+## If you would like to find out more. Please ask me on krzysztof . luczak 99 @ gmail . com - without spaces
 
 ## Screenshots
 ![input image](pokazowe/1.png)
