@@ -15,3 +15,11 @@
   - rest of requirements will be installed automatically with others
 - python manager.py runserver
 
+## Screenshots
+![input image](pokazowe/1.png)
+![input image](pokazowe/2.png)
+![input image](pokazowe/3.png)
+![input image](pokazowe/4.png)
+![input image](pokazowe/5.png)
+![input image](pokazowe/6.png)
+
