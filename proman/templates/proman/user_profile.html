@@ -1,0 +1,34 @@
+{% extends 'proman/base.html' %}
+
+{% load bootstrap %}
+{% block projects %}
+    {% if error %}
+        <div class="alert alert-danger">
+          {{ error }}
+        </div>
+    {% endif %}
+    {% if me %}
+        <div class="page-header">
+            <h1>
+                {{ request.user.first_name }} {{ request.user.last_name }}
+                <small>{{ request.user.username }}</small>
+            </h1>
+        </div>
+        <form action="{% url 'proman:user_profile' request.user.id %}" method="post">
+            {% csrf_token %}
+            {{ form|bootstrap }}
+            <input class="btn btn-success" type="submit" value="Zapisz" />
+        </form>
+    {% else %}
+        <div class="page-header">
+            <h1>
+                {{ curr_user.first_name }} {{ curr_user.last_name }}
+                <small>{{ curr_user.username }}</small>
+            </h1>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block actions %}
+{% endblock %}

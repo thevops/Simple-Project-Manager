@@ -1,0 +1,24 @@
+{% extends 'proman/base.html' %}
+
+{% load bootstrap %}
+{% block projects %}
+     {% if success %}
+        <div class="alert alert-success" role="alert">{{ success }}</div>
+    {% endif %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endif %}
+
+    <div class="page-header"><h1>Wyślij wiadomość</h1></div>
+    <form action="{% url 'proman:message_send' %}" method="post">
+        {% csrf_token %}
+        <div style="width: 20%">{{ form.recipient|bootstrap }}</div>
+        <div style="width: 50%">{{ form.content|bootstrap }}</div>
+        <input class="btn btn-success" type="submit" value="Wyślij" />
+    </form>
+
+{% endblock %}
+
+{% block actions %}
+
+{% endblock %}

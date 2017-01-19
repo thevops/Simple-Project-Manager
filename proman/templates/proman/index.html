@@ -1,0 +1,66 @@
+{% extends 'proman/base.html' %}
+
+{% block js_css_lib %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="static/chartkick.js"></script>
+{% endblock %}
+
+{% load chartkick %}
+{% block projects %}
+    {% if default_password %}
+        <div class="alert alert-danger" role="alert">
+            <a href="{% url 'proman:user_profile' request.user.id %}" class="alert-link">Powinieneś zmienić hasło !</a>
+        </div>
+    {% endif %}
+    <div class="page-header"><h1>Podsumowanie</h1></div>
+    <div class="container-fluid">
+        <div class="row">
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4"> <!-- LEFT SIDE -->
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <span class="badge">{{ live_projects_count }}</span>
+                    Projekty w trakcie
+                  </li>
+                  <li class="list-group-item list-group-item-success">
+                    <span class="badge">{{ end_projects_count }}</span>
+                    Projekty zakończone
+                  </li>
+                </ul>
+            </div>
+
+            <div class="col-md-4"> <!-- RIGHT SIDE -->
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <span class="badge">{{ my_live_tasks }}</span>
+                    Zadania w trakcie
+                  </li>
+                  <li class="list-group-item list-group-item-success">
+                    <span class="badge">{{ my_end_tasks }}</span>
+                    Zadania zakończone
+                  </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 50px">
+        {% if projects_timedelta_chart %}
+            {% bar_chart projects_timedelta_chart with library={ "title":{"text":"Czasochłonność moich projektów"}, "yAxis":{"title":{"text":"Liczba dni"}},"plotOptions": {"bar": {"dataLabels": {"enabled": "true", "crop": "false", "overflow": "none"}}}  } %}
+        {% endif %}
+        </div>
+        <div class="row" style="margin-top: 50px">
+        {% if tasks_month_count %}
+            {% column_chart tasks_month_count with library={"title": {"text":"Moje zadania w poszczególnych miesiącach"},"yAxis":{"title":{"text":"Liczba zadań"}}} %}
+        {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block actions %}
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'proman/base.html' %}
+
+{% block projects %}
+    <div class="sub-header"><h2>Moje projekty <small>[{{ myprojects.count }}]</small></h2></div>
+        <table class="table table-striped">
+            <tr><th>Nazwa</th><th>Ilość zadań</th><th>Pozostały czas</th><th>Akcja</th><th>Wykonano</th></tr>
+            {% for one_project in myprojects %}
+                <tr>
+                    <td>{{ one_project }}</td>
+                    <td>{{ one_project.task_set.count }}</td>
+                    <td>{{ one_project.enddate|timeuntil }}</td>
+                    <td>
+                        <a href="{% url 'proman:project_show' one_project.id %}" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Przeglądaj</a>
+                        <!--<a href="{% url 'proman:project_edit' one_project.id %}" class="btn btn-success btn-sm">Edytuj</a>-->
+                        <a href="{% url 'proman:project_remove' one_project.id %}" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Usuń</a>
+                    </td>
+                    <td>{{ one_project.complete_proc }}%</td>
+                </tr>
+            {% endfor %}
+        </table>
+    <br />
+    <div class="sub-header"><h2>Projekty, w których uczestniczę <small>[{{ notmyprojects|length }}]</small></h2></div>
+        <table class="table table-striped">
+            <tr><th>Nazwa</th><th>Ilość zadań</th><th>Pozostały czas</th><th>Akcja</th><th>Wykonano</th></tr>
+            {% for one_project in notmyprojects %}
+                <tr>
+                    <td>{{ one_project.project.name }}</td>
+                    <td>{{ one_project.project.task_set.count }}</td>
+                    <td>{{ one_project.project.enddate|timeuntil }}</td>
+                    <td>
+                        <a href="{% url 'proman:project_show' one_project.project_id %}" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Przeglądaj</a>
+                    </td>
+                    <td>{{ one_project.project.complete_proc }}%</td>
+                </tr>
+            {% endfor %}
+        </table>
+    <br />
+    <div class="sub-header"><h2>Projekty zakończone <small>[{{ end_projects|length }}]</small></h2></div>
+        <table class="table table-striped">
+            <tr><th>Nazwa</th><th>Akcja</th></tr>
+            {% for one_project in end_projects %}
+                <tr>
+                    <td>{{ one_project.name }}</td>
+                    <td>
+                        <a href="{% url 'proman:project_show' one_project.id %}" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Przeglądaj</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+{% endblock %}
+
+{% block actions %}
+    <a href="{% url 'proman:project_add' %}" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Projekt</a>
+    <a href="{% url 'proman:project_join' %}" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Dołącz do projektu</a>
+{% endblock %}
+

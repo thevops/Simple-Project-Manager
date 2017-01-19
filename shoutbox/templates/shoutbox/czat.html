@@ -1,0 +1,84 @@
+{% extends 'proman/base.html' %}
+
+{% block js_css_lib %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        $(function() {
+            var chatsock = new WebSocket('ws://' + window.location.host + "/czat/");
+
+            chatsock.onmessage = function(message) {
+                var data = JSON.parse(message.data);
+                var chat = $("#chat");
+                var ele = $('<tr class="chat_tr"></tr>');
+
+                ele.append(
+                    $("<td class='chat_td_user'></td>").text(data.user)
+                );
+                ele.append(
+                    $("<td class='chat_td_message'></td>").text(data.message)
+                );
+                ele.append(
+                    $("<td class='chat_td_timestamp'></td>").text(data.timestamp)
+                );
+
+                chat.append(ele)
+            };
+
+            $("#chatform").on("submit", function(event) {
+                var user = "{{ user }}";
+                var dNow = new Date();
+                var localdate= ("0"+dNow.getHours()).slice(-2) +':'+
+                                ("0"+dNow.getMinutes()).slice(-2) +', '+
+                                ("0"+dNow.getDate()).slice(-2) + '.'+
+                                ("0"+(dNow.getMonth()+1)).slice(-2) +'.'+
+                                dNow.getFullYear();
+                var message = {
+                    timestamp: localdate,
+                    user: user,
+                    message: $('#message').val(),
+                };
+                chatsock.send(JSON.stringify(message));
+                $("#message").val('').focus();
+                return false;
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            //$(".panel-body").scrollTop($(".panel-body")[1].scrollHeight); // not animated
+            $(".panel-body").animate({
+              scrollTop: $('.panel-body')[1].scrollHeight - $('.panel-body')[1].clientHeight
+            }, 1000);
+        });
+    </script>
+{% endblock %}
+
+{% block projects %}
+    <div class="panel panel-default">
+        <div id="chat_div" class="panel-heading">Czat</div>
+        <div class="panel-body" style="height: 400px; overflow-y: auto">
+            <table id="chat" class="chat_table">
+                    {% for message in messages %}
+                        <tr class="chat_tr">
+                            <td class='chat_td_user'>{{ message.user }}</td>
+                            <td class='chat_td_message'>{{ message.message }}</td>
+                            <td class='chat_td_timestamp'>{{ message.timestamp|date:"H:i, d.m.Y" }}</td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
+   <form id="chatform">
+        <div class="input-group" style="width: 100%">
+            <input id="message" type="text" class="form-control" placeholder="tekst">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit" id="go">Wyślij</button>
+            </span>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block actions %}
+
+{% endblock %}

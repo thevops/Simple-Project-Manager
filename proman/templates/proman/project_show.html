@@ -1,0 +1,127 @@
+{% extends 'proman/base.html' %}
+
+{% block projects %}
+    {% if owner %}
+        <div class="page-header"><h1>{{ project.name }} <h4>właściciel: Ty<span style="float: right;">kod dostępu: {{ project.id }}_{{ project.passforjoin }}</span></h4></h1></div>
+        <!-- left side -->
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Data zakończenia</h3></div>
+                  <div class="panel-body">
+                    {{ project.enddate }} (pozostało {{ project.enddate|timeuntil }})
+                  </div>
+            </div>
+
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Zespół ({{ members.count }})</h3></div>
+                  <div class="panel-body">
+                    <div class="list-group">
+                        {% for member in members %}
+                            <span class="list-group-item">
+                                <a href="{% url 'proman:user_profile' member.member.id %}">{{ member.member }}</a>
+                                <a href="{% url 'proman:project_del_member' project.id member.member.id %}" style="float: right"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Usuń</a>
+                            </span>
+                        {% endfor %}
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <!-- right side -->
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Postęp</h3></div>
+                    <div class="panel-body">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ level|floatformat }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ level|floatformat:"0" }}%">
+                                {{ level|floatformat }}%
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Zadania ({{ tasks.count }})</h3></div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                        {% for task in tasks %}
+                            <a href="{% url 'proman:task_show' task.id %}" class="list-group-item">({{ task.contractor }}) <b>{{ task.name }}:</b> {{ task.description|truncatechars:60 }}</a>
+                        {% endfor %}
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="page-header"><h1>{{ project.name }} <h4>właściciel: {{ project.owner }}</h4></h1></div>
+        <!-- left side -->
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Data zakończenia</h3></div>
+                  <div class="panel-body">
+                    {{ project.enddate }} (pozostało {{ project.enddate|timeuntil }})
+                  </div>
+            </div>
+
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Zespół ({{ members.count }})</h3></div>
+                  <div class="panel-body">
+                    <div class="list-group">
+                        {% for member in members %}
+                            <a href="{% url 'proman:user_profile' member.member.id %}" class="list-group-item">{{ member.member }}</a>
+                        {% endfor %}
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <!-- right side -->
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Postęp</h3></div>
+                    <div class="panel-body">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ level|floatformat }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ level|floatformat:"0" }}%">
+                                {{ level|floatformat }}%
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="panel panel-primary">
+                  <div class="panel-heading"><h3 class="panel-title">Zadania ({{ tasks.count }})</h3></div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                        {% for task in tasks %}
+                            <a href="{% url 'proman:task_show' task.id %}" class="list-group-item">({{ task.contractor }}) <b>{{ task.name }}:</b> {{ task.description|truncatechars:60 }}</a>
+                        {% endfor %}
+                    </div>
+                    </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block actions %}
+    {% if owner and project.complete_proc < 100 %}
+    <a href="{% url 'proman:project_add_member' project.id %}" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Uczestnik</a>
+
+    <a href="{% url 'proman:task_add' project.id %}" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Zadanie</a>
+
+    <a href="{% url 'proman:project_edit' project.id %}" class="btn btn-success btn-sm">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edytuj</a>
+
+    <a href="{% url 'proman:task_change_weight' project.id %}" class="btn btn-success btn-sm">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Zmień wagi</a>
+
+    <a href="{% url 'proman:project_remove' project.id %}" class="btn btn-danger btn-sm">
+        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Usuń</a>
+    {% endif %}
+    {% if project.complete_proc == 100 %}
+        <div class="alert alert-info">
+            Projekt zakończony
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'proman/base.html' %}
+
+{% block js_css_lib %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                dateFormat: "dd.mm.yy"
+            });
+        });
+    </script>
+{% endblock %}
+
+{% load bootstrap %}
+{% block projects %}
+    <div class="page-header"><h1>Dodaj projekt</h1></div>
+    <form action="{% url 'proman:project_add' %}" method="post">
+        {% csrf_token %}
+        <div style="width: 30%">{{ form.name|bootstrap }}</div>
+        <div style="width: 12%">{{ form.startdate|bootstrap }}</div>
+        <div style="width: 12%">{{ form.enddate|bootstrap }}</div>
+        <input class="btn btn-success" type="submit" value="Dodaj" />
+    </form>
+{% endblock %}

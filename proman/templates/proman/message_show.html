@@ -1,0 +1,43 @@
+{% extends 'proman/base.html' %}
+
+{% block js_css_lib %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script>
+        $(document).ready(function() {
+            //$(".col-md-9").scrollTop($(".col-md-9")[0].scrollHeight); //not animated
+            $(".col-md-9").animate({
+              scrollTop: $('.col-md-9')[0].scrollHeight - $('.col-md-9')[0].clientHeight
+            }, 1000);
+         });
+    </script>
+{% endblock %}
+
+{% block projects %}
+    <div class="col-md-9" style="height: 500px; overflow-y: auto;">
+        {% for msg in conversation %}
+            {% if msg.name == request.user.username %}
+                <div class="alert" style="margin: 4px; background-color: #8ebb89"> <!-- #66bb6a #ffee58-->
+                    <span style="float: right">{{ msg.sent_at }}</span><br />
+                    {{ msg.txt|linebreaks}}
+                </div>
+            {% else %}
+                <div class="alert" style="margin: 4px; background-color: #8aacff"> <!-- #66bb6a #ffee58-->
+                    <span style="float: right">{{ msg.sent_at }}</span><br />
+                    {{ msg.txt }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col-md-3">
+        <div class="list-group">
+            {% for user in conv_users %}
+                <a href="{% url 'proman:message_show' user.id %}" class="list-group-item">{{ user }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block actions %}
+{% endblock %}

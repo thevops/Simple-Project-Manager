@@ -1,0 +1,39 @@
+{% extends 'proman/base.html' %}
+
+{% block projects %}
+    <div class="sub-header"><h2>Aktualne zadania <small>[{{ my_live_tasks.count }}]</small></h2></div>
+    <table class="table table-striped">
+            <tr><th>Nazwa</th><th>Projekt</th><th>Pozostały czas (projekt)</th><th>Akcja</th></tr>
+            {% for task in my_live_tasks %}
+                <tr>
+                    <td>{{ task }}</td>
+                    <td><a href="{% url 'proman:project_show' task.project.id %}">{{ task.project }}</a></td>
+                    <td>{{ task.project.enddate|timeuntil }}</td>
+                    <td>
+                        <a href="{% url 'proman:task_show' task.id %}" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Przeglądaj</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <div class="sub-header"><h2>Zakończone zadania <small>[{{ my_end_tasks.count }}]</small></h2></div>
+        <table class="table table-striped">
+                <tr><th>Nazwa</th><th>Projekt</th><th>Akcja</th></tr>
+                {% for task in my_end_tasks %}
+                    <tr>
+                        <td>{{ task }}</td>
+                        <td><a href="{% url 'proman:project_show' task.project.id %}">{{ task.project }}</a></td>
+                        <td>
+                            <a href="{% url 'proman:task_show' task.id %}" class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Przeglądaj</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+{% endblock %}
+
+{% block actions %}
+{% endblock %}
+

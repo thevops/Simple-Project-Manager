@@ -1,0 +1,16 @@
+{% extends 'proman/base.html' %}
+
+{% block projects %}
+    <ul class="list-inline" style="padding: 1% 25% 10% 0%">
+    {% for u in restusers %}
+        <li style="padding: 5px"><a href="{% url 'proman:project_add_member' project.id u.id %}" class="list-group-item">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {{ u }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block actions %}
+    <a href="{% url 'proman:project_show' project.id %}" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Powrót</a>
+{% endblock %}
+
